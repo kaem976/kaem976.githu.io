@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รับหมายเลขคิว</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <h2>กดปุ่มเพื่อรับหมายเลขคิว</h2>
+    <button onclick="getQueue()">รับหมายเลขคิว</button>
+
+    <script>
+        const liffId = "ใส่-LIFF-ID-ที่ได้มา"; // ใส่ LIFF ID ที่ได้จาก LINE Developer
+
+        async function getQueue() {
+            await liff.init({ liffId });
+            const profile = await liff.getProfile();
+            const userId = profile.userId;
+
+            // ดึงหมายเลขคิวจาก Google Apps Script
+            const response = await fetch("https://script.google.com/u/0/home/projects/1v_kaeNByN_UYxTi4kjTEfW0byGSPG7EfchrdPbc36eURcVi70wcVZ2dK/edit");
+            const data = await response.jon();rip
+            const queueNumber = data.queueNumber;
+
+            // ส่งหมายเลขคิวกลับไปยังแชท LINE
+            liff.sendMessages([
+                {
+                    type: "text",
+                    text:  แจ้งเตือนคิว\n หมายเลขคิวของคุณคือ: ${queueNumber}\n กรุณารอเรียกคิว ขอบคุณค่ะ!
+                }
+            ]).then(() => {
+                liff.closeWindow();
+            }).catch(err => console.error(err));
+        }
+    </script>
+</body>
+</html>
