@@ -65,28 +65,28 @@
     </div>
 
     <script>
-        const liffId = "U531bd0f607c95549cf91ef75b3854e00";
+        const liffId = "YOUR_LIFF_ID"; // Replace with your LIFF ID
+        const scriptURL = "YOUR_DEPLOYMENT_URL"; // Replace with your Apps Script URL
 
         async function getQueue() {
             await liff.init({ liffId });
             const profile = await liff.getProfile();
             const userId = profile.userId;
 
-            const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec");
+            const response = await fetch(`${scriptURL}?userId=${userId}`);
             const data = await response.json();
             const queueNumber = data.queueNumber;
 
             document.getElementById("queueDisplay").innerText = `หมายเลขคิวของคุณคือ: ${queueNumber}`;
             document.getElementById("bookingText").style.display = "block";
 
-            liff.sendMessages([
+            await liff.sendMessages([
                 {
                     type: "text",
                     text: `แจ้งเตือนคิว\nหมายเลขคิวของคุณคือ: ${queueNumber}\nกรุณารอเรียกคิว ขอบคุณค่ะ!`
                 }
-            ]).then(() => {
-                liff.closeWindow();
-            }).catch(err => console.error(err));
+            ]);
+            liff.closeWindow();
         }
     </script>
 </body>
